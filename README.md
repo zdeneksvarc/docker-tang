@@ -1,6 +1,6 @@
 ## Tang docker container image
 
-Runs (tang)[https://github.com/latchset/tang] inside a Rocky Linux docker container.
+Runs [tang](https://github.com/latchset/tang) inside a Rocky Linux docker container.
 
 ## Usage
 
