@@ -18,3 +18,10 @@ Using host networking with a custom port:
 ```
 docker run -e TANG_LISTEN_PORT=1234 -d --network host -v tang-db:/var/db/tang ghcr.io/stackhpc/tang:latest
 ```
+
+## Manual testing
+
+```
+echo "Hello World" | clevis encrypt tang '{ "url": "http://localhost:1234"}' > secret.jwe
+clevis decrypt < secret.jwe
+```
