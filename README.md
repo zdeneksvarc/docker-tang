@@ -4,9 +4,6 @@ Runs [tang](https://github.com/latchset/tang) inside a Debian docker container.
 
 ## Usage
 
-It is recommended to use the latest versioned release e.g v1.0.0. To avoid needing to update the README
-each time, the documentation will use the `latest` tag.
-
 Local build:
 
 ```
