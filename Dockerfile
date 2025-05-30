@@ -1,27 +1,18 @@
-FROM rockylinux/rockylinux:8.6.20220707
+FROM debian:bookworm-slim
 
-ENV SUMMARY="Network Presence Binding Daemon." \
-    DESCRIPTION="Tang is a small daemon for binding data to the presence of a third party. This is a containerized Tang server." \
-    VERSION=1 \
-    TANG_LISTEN_PORT=80
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        tang socat && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-LABEL name="stackhpc/tang" \
-      summary="${SUMMARY}" \
-      description="${DESCRIPTION}" \
-      version="${VERSION}" \
-      usage="podman run -d -p 8080:80 -v tang-keys:/var/db/tang --name tang stackhpc/tang"
+COPY tangd-entrypoint /tangd-entrypoint
+COPY tangd-healthcheck /tangd-healthcheck
 
-RUN dnf update -y && \
-    dnf install -y \
-             tang \
-             socat && \
-    dnf clean all && \
-    rm -rf /var/cache/yum
-
-COPY root /
+RUN chmod +x /tangd-entrypoint /tangd-healthcheck
 
 VOLUME ["/var/db/tang"]
-EXPOSE "${TANG_LISTEN_PORT}"
+EXPOSE 80
 
-HEALTHCHECK CMD ["/usr/bin/tangd-healthcheck"]
-CMD ["/usr/bin/tangd-entrypoint"]
+HEALTHCHECK CMD ["/tangd-healthcheck"]
+CMD ["/tangd-entrypoint"]
