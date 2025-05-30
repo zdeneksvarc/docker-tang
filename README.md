@@ -7,34 +7,34 @@ Runs [tang](https://github.com/latchset/tang) inside a Debian docker container.
 Local build:
 
 ```
-docker build --no-cache -t tang:latest .
+docker build --no-cache -t tang:test .
 ```
 
 Simplest example:
 
 ```
-docker run -d -p 8080:80 -v tang-db:/var/db/tang tang:latest
+docker run -d -p 8080:80 -v tang-db:/var/db/tang tang:test
 ```
 
 Using host networking with a custom port:
 
 ```
-docker run -e TANG_LISTEN_PORT=1234 -d --network host -v tang-db:/var/db/tang tang:latest
+docker run -e TANG_LISTEN_PORT=1234 -d --network host -v tang-db:/var/db/tang tang:test
 ```
 
 ## Manual testing
 
 ```
 # Build your own container
-docker build --no-cache -t tang:latest .
+docker build --no-cache -t tang:test .
 # Start a tang container
-docker run --rm -e TANG_LISTEN_PORT=1234 --name tang -d --network host -v tang-db:/var/db/tang tang:latest
+docker run --rm -e TANG_LISTEN_PORT=1234 --name tang -d --network host -v tang-db:/var/db/tang tang:test
 # Encrypt some text
 echo "Hello World" | clevis encrypt tang '{ "url": "http://localhost:1234"}' > secret.jwe
 # Stop docker to trigger container deletion
 docker stop tang
 # Recreate to test persistence of DB
-docker run --rm -e TANG_LISTEN_PORT=1234 --name tang -d --network host -v tang-db:/var/db/tang tang:latest
+docker run --rm -e TANG_LISTEN_PORT=1234 --name tang -d --network host -v tang-db:/var/db/tang tang:test
 # Attempt decrypt
 clevis decrypt < secret.jwe
 ```
@@ -44,7 +44,7 @@ clevis decrypt < secret.jwe
 ```
 services:
   tang:
-    image: tang:latest
+    image: tang:test
     container_name: tang
     ports:
       - "28888:80"
